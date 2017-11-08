@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns:b="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/security"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<http auto-config="true">
+		<intercept-url pattern="/" access="permitAll" />
+		<intercept-url pattern="/async" access="hasRole('ROLE_ADMIN')"/>
+		<csrf disabled="true"/>
+		<session-management session-fixation-protection="migrateSession"></session-management>
+	</http>
+
+	<b:bean id="midatasource" name="midatasource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		p:driverClassName="oracle.jdbc.driver.OracleDriver" p:url="jdbc:oracle:thin:@localhost:1521:xe"
+		p:username="HR" p:password="password">
+
+	</b:bean>
+	<authentication-manager>
+		<authentication-provider>
+			<user-service>
+				<user name="user" password="password" authorities="ROLE_USER" />
+				<user name="admin" password="password" authorities="ROLE_USER,ROLE_ADMIN" />
+			</user-service>
+		</authentication-provider>
+		<authentication-provider>
+			<jdbc-user-service data-source-ref="midatasource"
+				authorities-by-username-query="select user_name, role_name from user_roles where user_name = ?"
+				users-by-username-query="select user_name, user_pass, 1 from users where user_name = ?" />
+		</authentication-provider>
+	</authentication-manager>
+</b:beans>

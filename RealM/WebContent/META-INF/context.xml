@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context docBase="RealM" path="/RealM"
+	reloadable="true">
+	<Realm className="org.apache.catalina.realm.JDBCRealm"
+		connectionName="hr" connectionPassword="password"
+		connectionURL="jdbc:oracle:thin:@localhost:1521:xe" 
+		driverName="oracle.jdbc.driver.OracleDriver"
+		roleNameCol="ROLE_NAME" userCredCol="USER_PASS" userNameCol="USER_NAME"
+		userRoleTable="USER_ROLES" userTable="USERS" />
+</Context>
